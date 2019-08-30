@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,21 +39,28 @@ public class IssueTests {
 
     private Set<Issue> getIssues() throws IOException {
         String json = Request.Get("https://api.github.com/repos/TestUserForTests/APITests/issues")
-                .addHeader("Accept","application/json;charset=UTF-8")
                 .execute().returnContent().asString();
-        JsonElement parsed = new JsonParser().parse(json);
-        JsonElement issues = parsed.getAsJsonObject();
-        return new Gson().fromJson(issues, new TypeToken<Set<Issue>>(){}.getType());
+        return new HashSet<>(Arrays.asList((new Gson()).fromJson(json,Issue[].class)));
     }
 
     private int createIssue(Issue newIssue) throws IOException {
         String json = Request.Post("https://api.github.com/repos/TestUserForTests/APITests/issues")
+                .addHeader("Authorization","51bd85e2f2a96d0d083c363ca6dfed33ec5455b9")
                 .bodyForm(new BasicNameValuePair("title", newIssue.getTitle()),
                         new BasicNameValuePair("body", newIssue.getBody()))
                 .execute().returnContent().asString();
         JsonElement parsed = new JsonParser().parse(json);
         return parsed.getAsJsonObject().get("id").getAsInt();
     }
+
+//    private Set<Issue> getIssues() throws IOException {
+//        String json = getExecutor().execute(Request.Get("https://api.github.com/repos/TestUserForTests/APITests/issues"))
+//                .returnContent().asString();
+//        JsonElement parsed = new JsonParser().parse(json);
+//        JsonElement issues = parsed.getAsJsonObject().get("issues");
+//        return new Gson().fromJson(issues, new TypeToken<Set<Issue>>(){}.getType());
+//        return new HashSet<>(Arrays.asList((new Gson()).fromJson(json,Issue[].class)));
+//    }
 
 //    private Executor getExecutor() {
 //        return Executor.newInstance()
