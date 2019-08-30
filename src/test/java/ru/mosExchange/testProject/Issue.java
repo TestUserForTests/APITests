@@ -20,11 +20,19 @@ public class Issue {
         return title;
     }
 
+    public String getBody() {
+        return body;
+    }
+
     public Issue withTitle(String title) {
         this.title = title;
         return this;
     }
 
+    public Issue withBody(String body) {
+        this.body = body;
+        return this;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,10 +51,5 @@ public class Issue {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (body != null ? body.hashCode() : 0);
         return result;
-    }
-
-    public Issue withBody(String body) {
-        this.body = body;
-        return this;
     }
 }

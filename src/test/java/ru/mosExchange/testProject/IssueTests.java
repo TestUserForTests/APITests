@@ -28,7 +28,7 @@ public class IssueTests {
     }
 
     private Set<Issue> getIssues() throws IOException {
-        String json = getExecutor().execute(Request.Get("https://api.github.com/newTestUserForTests/issues"))
+        String json = getExecutor().execute(Request.Get("https://api.github.com/TestUserForTests/issues"))
                 .returnContent().asString();
         JsonElement parsed = new JsonParser().parse(json);
         JsonElement issues = parsed.getAsJsonObject().get("issues");
@@ -37,11 +37,11 @@ public class IssueTests {
 
     private Executor getExecutor() {
         return Executor.newInstance()
-                .auth("newTestUserForTests", "w38lUiuI");
+                .auth("51bd85e2f2a96d0d083c363ca6dfed33ec5455b9", "");
     }
 
     private int createIssue(Issue newIssue) throws IOException {
-        String json = getExecutor().execute(Request.Post("https://api.github.com/repos/newTestUserForTests/hello-world/issues")
+        String json = getExecutor().execute(Request.Post("https://api.github.com/repos/TestUserForTests/APITests/issues")
                 .bodyForm(new BasicNameValuePair("title", newIssue.getTitle()),
                         new BasicNameValuePair("body", newIssue.getBody())))
                 .returnContent().asString();
