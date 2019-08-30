@@ -4,13 +4,21 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,27 +36,25 @@ public class IssueTests {
     }
 
     private Set<Issue> getIssues() throws IOException {
-        String json = getExecutor().execute(Request.Get("https://api.github.com/TestUserForTests/issues"))
-                .returnContent().asString();
+        String json = Request.Get("https://api.github.com/repos/TestUserForTests/APITests/issues")
+                .addHeader("Accept","application/json;charset=UTF-8")
+                .execute().returnContent().asString();
         JsonElement parsed = new JsonParser().parse(json);
-        JsonElement issues = parsed.getAsJsonObject().get("issues");
+        JsonElement issues = parsed.getAsJsonObject();
         return new Gson().fromJson(issues, new TypeToken<Set<Issue>>(){}.getType());
     }
 
-    private Executor getExecutor() {
-        return Executor.newInstance()
-                .auth("51bd85e2f2a96d0d083c363ca6dfed33ec5455b9", "");
-    }
-
     private int createIssue(Issue newIssue) throws IOException {
-        String json = getExecutor().execute(Request.Post("https://api.github.com/repos/TestUserForTests/APITests/issues")
+        String json = Request.Post("https://api.github.com/repos/TestUserForTests/APITests/issues")
                 .bodyForm(new BasicNameValuePair("title", newIssue.getTitle()),
-                        new BasicNameValuePair("body", newIssue.getBody())))
-                .returnContent().asString();
+                        new BasicNameValuePair("body", newIssue.getBody()))
+                .execute().returnContent().asString();
         JsonElement parsed = new JsonParser().parse(json);
         return parsed.getAsJsonObject().get("id").getAsInt();
     }
-}
 
-//    public void main() {
+//    private Executor getExecutor() {
+//        return Executor.newInstance()
+//                .auth("51bd85e2f2a96d0d083c363ca6dfed33ec5455b9", "");
 //    }
+}
