@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class IssueTests {
 
-    private static final String TOKEN = "db41fc4d5367e2e3cb604dce2ba2b1c4645e1ef3";
+    private static final String TOKEN = "1886b68237b0df565813bef2a6645e336a33e5fe";
     private static final String URL = "https://api.github.com/repos/TestUserForTests/APITests/issues";
     private static Gson gson = new Gson();
     private String issueTitle = "Test Issue"+ UUID.randomUUID().toString();
@@ -61,7 +61,7 @@ class IssueTests {
                 .addHeader("Authorization", "token "+ IssueTests.TOKEN)
                 .addHeader("Accept","application/vnd.github.symmetra-preview+json")
                 .bodyString(postData, ContentType.APPLICATION_JSON);
-        getExecutor().execute(putRequest);
+        getExecutor().execute(putRequest).returnContent().asString();
     }
 
     private Executor getExecutor() {
