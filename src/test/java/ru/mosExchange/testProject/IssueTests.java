@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class IssueTests {
 
-    private static final String TOKEN = "1886b68237b0df565813bef2a6645e336a33e5fe";
+    private static final String TOKEN = "ac3d9326185f38862e20ca1187d2a3540f99cecf";
     private static final String URL = "https://api.github.com/repos/TestUserForTests/APITests/issues";
     private static Gson gson = new Gson();
     private String issueTitle = "Test Issue"+ UUID.randomUUID().toString();
